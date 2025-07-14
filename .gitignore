@@ -1,0 +1,8 @@
+data/standard-cards-2025-07-01.json
+data/standard-cards-2025-07-08.json
+data/standard-cards-2025-07-11.json
+dep/__pycache__/snowflake_functions.cpython-311.pyc
+dep/__pycache__/snowflake_login.cpython-311.pyc
+dep/__pycache__/standard_function.cpython-311.pyc
+dep/snowflake_login.py
+pipe/untitled1.py
