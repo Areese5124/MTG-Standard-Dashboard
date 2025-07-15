@@ -18,11 +18,12 @@ from dep.snowflake_functions import database_connect
 from dep.snowflake_functions import create_stage
 from dep.snowflake_functions import loading_json_into_stage
 from dep.snowflake_functions import porting_json_data_in
+from dep.snowflake_functions import parsing_json_into_new_table
 
 #------------------------------------------------------------------
 
 standard_cards = call_standard_cards()
-#check = standard_cards_check(standard_cards)
+check = standard_cards_check(standard_cards)
 
 check = True
 if check:
@@ -31,6 +32,7 @@ if check:
     database_connect(cursor)
     stage_name = create_stage(cursor)
     loading_json_into_stage(new_file_name, stage_name, cursor)
-    porting_json_data_in(cursor)
-    #load data from schema into a new table
-
+    porting_json_data_in(new_file_name, stage_name, cursor)
+    parsing_json_into_new_table(stage_name, cursor)
+    
+    

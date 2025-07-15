@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*
 """
 Created on Fri Jul 11 11:33:27 2025
 
@@ -17,7 +17,7 @@ def create_stage (cursor):
     date = (str(date.today())).replace('-','_')
     stage_name = 'standard_cards_' + date
     cursor.execute(
-        "CREATE STAGE %s FILE_FORMAT=(TYPE='json')"
+        "CREATE OR REPLACE STAGE %s FILE_FORMAT=(TYPE='json')"
         %(stage_name,) 
                    )
     print('New stage %s created' %(stage_name,) )
@@ -25,7 +25,7 @@ def create_stage (cursor):
 
 def loading_json_into_stage(file, stage, cursor):
     from pathlib import Path
-    current_dir = Path(__file__).parent
+    current_dir = Path.cwd()
     most_recent_loc = ((current_dir / '..' / 'data' / file).resolve())
     most_recent_loc = str(most_recent_loc).replace('\\','/')
     cursor.execute(
@@ -34,18 +34,43 @@ def loading_json_into_stage(file, stage, cursor):
         )
     print('Successfully put %s into the stage %s' % (file, stage))
 
-def porting_json_data_in (cursor): 
+def porting_json_data_in (file, stage, cursor): 
     cursor.execute(
         'CREATE OR REPLACE TRANSIENT TABLE json_basic_code (json_data VARIANT)'
         )
     cursor.execute(
         '''
-        COPY INTO json_basic_code FROM @standard_cards_2025_07_11
-        FILE_FORMAT=(TYPE='json')
-        FILES = ('standard-cards-2025-07-11.json.gz')
+        COPY INTO json_basic_code 
+        FROM @%s/%s.gz
+        FILE_FORMAT = (format_name = json_format)
         '''
+        %(stage, file)
         )
-    
+    print(
+        '''Successfully moved the %s data from the %s stage
+          into the temporary table.
+          ''' % (file, stage))
+          
+def parsing_json_into_new_table(stage, cursor):
+    cursor.execute(
+        '''
+        CREATE OR REPLACE TABLE %s AS SELECT 
+            json_data:name::string as Card_Name,
+            json_data:cmc::float AS Converted_Mana_Cost,
+            json_data:mana_cost::string as Mana_Cost,
+            json_data:color_identity AS Color_Identity,
+            json_data:colors AS Colors,
+            json_data:keywords AS Keywords,
+            json_data:oracle_text::string as Card_Text,
+            json_data:power::string as Power,
+            json_data:toughness::string as Toughness,
+            json_data:type_line::string as Type_Line,
+            json_data:set_name::string as Set_Name
+        FROM json_basic_code
+        ;
+        '''
+        %(stage,)
+        )
     
     
     
