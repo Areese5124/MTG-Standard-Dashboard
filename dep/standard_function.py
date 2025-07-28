@@ -23,7 +23,7 @@ def call_standard_cards():
         data = response.json()
         all_cards.extend(data["data"])
         print('Cards from page %i saved' % (page,))
-        time.sleep(.1)
+        time.sleep(.2)
         has_more = data["has_more"]
         page += 1
     return all_cards

@@ -31,12 +31,12 @@ def loading_json_into_stage(file, stage, cursor):
     cursor.execute(
         "PUT 'file://%s' @%s"
         %(most_recent_loc, stage)
-        )
+        ) 
     print('Successfully put %s into the stage %s' % (file, stage))
 
 def porting_json_data_in (file, stage, cursor): 
     cursor.execute(
-        'CREATE OR REPLACE TRANSIENT TABLE json_basic_code (json_data VARIANT)'
+        'CREATE OR REPLACE TEMPORARY TABLE json_basic_code (json_data VARIANT)'
         )
     cursor.execute(
         '''

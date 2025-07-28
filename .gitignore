@@ -10,3 +10,4 @@ data/standard-cards-2025-07-15.json
 dep/__pycache__/snowflake_functions.cpython-313.pyc
 dep/__pycache__/snowflake_login.cpython-313.pyc
 dep/__pycache__/standard_function.cpython-313.pyc
+/data

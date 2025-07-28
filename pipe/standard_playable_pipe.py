@@ -25,7 +25,6 @@ from dep.snowflake_functions import parsing_json_into_new_table
 standard_cards = call_standard_cards()
 check = standard_cards_check(standard_cards)
 
-check = True
 if check:
     new_file_name = json_save(standard_cards)
     cursor = snowflake_login()
