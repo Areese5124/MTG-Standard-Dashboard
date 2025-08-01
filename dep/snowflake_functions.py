@@ -11,13 +11,13 @@ def database_connect (cursor):
     print('Connected to Database')
     cursor.execute('USE SCHEMA STANDARD_PLAYABLE_DATASET.DATA_REPO')
     print('Connected to Schema')
-    
-def create_stage (cursor):
+
+def creating_json_stage (cursor):
     from datetime import date
     date = (str(date.today())).replace('-','_')
     stage_name = 'standard_cards_' + date
     cursor.execute(
-        "CREATE OR REPLACE STAGE %s FILE_FORMAT=(TYPE='json')"
+        "CREATE TEMPORARY STAGE %s FILE_FORMAT=(TYPE='json')"
         %(stage_name,) 
                    )
     print('New stage %s created' %(stage_name,) )
@@ -36,7 +36,7 @@ def loading_json_into_stage(file, stage, cursor):
 
 def porting_json_data_in (file, stage, cursor): 
     cursor.execute(
-        'CREATE OR REPLACE TEMPORARY TABLE json_basic_code (json_data VARIANT)'
+        'CREATE TEMPORARY TABLE json_basic_code (json_data VARIANT)'
         )
     cursor.execute(
         '''
@@ -72,5 +72,15 @@ def parsing_json_into_new_table(stage, cursor):
         %(stage,)
         )
     
+def txt_newest_table(stage, cursor):
+    from io import BytesIO
+    most_recent_table_txt = BytesIO(stage.encode('utf-8'))
+    cursor.execute(
+    'CREATE STAGE IF NOT EXISTS TXT_REFERENCE_STAGE'
+        )
+    cursor.execute(
+    'PUT file://this_directory_path/most_recent_table.txt @TXT_REFERENCE_STAGE',
+    file_stream = most_recent_table_txt
+        )
     
     
