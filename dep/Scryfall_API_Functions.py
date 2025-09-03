@@ -34,7 +34,7 @@ def standard_cards_check(x):
     with open('most_recent_standard_dataset.txt', 'r') as txt_file:
         standard_file_name = txt_file.read().rstrip()
     current_dir = Path(__file__).parent
-    most_recent_loc = (current_dir / '..' / 'data' / standard_file_name).resolve()
+    most_recent_loc = (current_dir / '..' / 'Data/Standard-Cards' / standard_file_name).resolve()
     with open(most_recent_loc, 'r') as file:
         most_recent_standard_cards = json.load(file)
     new_cards = False
@@ -49,7 +49,7 @@ def json_save(x):
     from datetime import date
     date = str(date.today())
     file_name = 'standard-cards-' + date + '.json'
-    file_location = '../Data/' + file_name
+    file_location = '../Data/Standard-Cards/' + file_name
     with open(file_location, 'w') as output_file:
         json.dump(x, output_file, indent=2)
     print('Standard card data saved at', file_location)

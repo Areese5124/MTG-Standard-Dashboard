@@ -17,7 +17,7 @@ def creating_json_stage (cursor):
     date = (str(date.today())).replace('-','_')
     stage_name = 'standard_cards_' + date
     cursor.execute(
-        "CREATE TEMPORARY STAGE %s FILE_FORMAT=(TYPE='json')"
+        "CREATE TEMPORARY STAGE IF NOT EXISTS %s FILE_FORMAT=(TYPE='json')"
         %(stage_name,) 
                    )
     print('New stage %s created' %(stage_name,) )
@@ -26,7 +26,7 @@ def creating_json_stage (cursor):
 def loading_json_into_stage(file, stage, cursor):
     from pathlib import Path
     current_dir = Path.cwd()
-    most_recent_loc = ((current_dir / '..' / 'data' / file).resolve())
+    most_recent_loc = ((current_dir / '..' / 'Data/Standard-Cards' / file).resolve())
     most_recent_loc = str(most_recent_loc).replace('\\','/')
     cursor.execute(
         "PUT 'file://%s' @%s"
@@ -36,7 +36,7 @@ def loading_json_into_stage(file, stage, cursor):
 
 def porting_json_data_in (file, stage, cursor): 
     cursor.execute(
-        'CREATE TEMPORARY TABLE json_basic_code (json_data VARIANT)'
+        'CREATE OR REPLACE TEMPORARY TABLE json_basic_code (json_data VARIANT)'
         )
     cursor.execute(
         '''

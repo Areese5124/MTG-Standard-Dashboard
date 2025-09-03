@@ -10,16 +10,16 @@ from pathlib import Path
 main_dir = str(Path(__file__).parent.parent)
 sys.path.append(main_dir)
   
-from dep.standard_function import call_standard_cards
-from dep.standard_function import standard_cards_check
-from dep.standard_function import json_save
-from dep.snowflake_login import snowflake_login
-from dep.snowflake_functions import database_connect
-from dep.snowflake_functions import creating_json_stage
-from dep.snowflake_functions import loading_json_into_stage
-from dep.snowflake_functions import porting_json_data_in
-from dep.snowflake_functions import parsing_json_into_new_table
-from dep.snowflake_functions import txt_newest_table
+from dep.Scryfall_API_Functions import call_standard_cards
+from dep.Scryfall_API_Functions import standard_cards_check
+from dep.Scryfall_API_Functions import json_save
+from dep.Snowflake_Login import snowflake_login
+from dep.Scryfall_Snowflake_Functions import database_connect
+from dep.Scryfall_Snowflake_Functions import creating_json_stage
+from dep.Scryfall_Snowflake_Functions import loading_json_into_stage
+from dep.Scryfall_Snowflake_Functions import porting_json_data_in
+from dep.Scryfall_Snowflake_Functions import parsing_json_into_new_table
+from dep.Scryfall_Snowflake_Functions import txt_newest_table
 #------------------------------------------------------------------
 
 standard_cards = call_standard_cards()
